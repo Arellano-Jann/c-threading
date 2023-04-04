@@ -1,0 +1,16 @@
+NAME:
+1. Run arraySumLooped and arraySum a few times with whatever data file you would like. 
+    a. What output stays the same? 
+    b. What output changes even when the same program is run with the same data? Why does that happen?
+2. Run arraySumLooped with the ten_values.txt file. 
+    a. Do you get the same sum when you run arraySum with ten_values.txt and no lock?
+    b. Do you get the same sum when you run arraySum with ten_values.txt and a lock?
+    c. How does the run time (in ms) of arraySumLooped and arraySum (locked AND not locked) compare?
+    d. Why is the total time to calculate the sum for the  three cases different? Were they what you expected? Why or why not?
+3.  Run arraySumLooped with the oneThousandValues.txt file. 
+    a. Do you get the same sum when you run arraySum with oneThousandValues.txt and no lock?
+    b. Do you get the same sum when you run arraySum with oneThousandValues.txt and a lock?
+    b. How does the run time (in ms) of arraySumLooped and arraySum compare?
+    c. Why is the total time to calculate the sum for the two programs different? Were they what you expected? Why or why not?
+4. Does the use of a lock in a threaded program have any impact on performance? How does the number of threads and the amount of data affect the performance of the threaded program with and without locks?
+5. Is the lock necessary to compute consistent values every time the program is run? Why or why not? Why do you think that occurs? You should run the program with and without a lock and with a few different data files to get the full picture.
