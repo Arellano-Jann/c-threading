@@ -1,4 +1,4 @@
-NAME:
+NAME: Jann Arellano
 1. Run arraySumLooped and arraySum a few times with whatever data file you would like. 
     a. What output stays the same? 
     b. What output changes even when the same program is run with the same data? Why does that happen?
