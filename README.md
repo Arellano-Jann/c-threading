@@ -130,24 +130,45 @@ typedef struct thread_data{
 
 ## _main()_<br/>
 
-From the terminal, the user should be able to enter the program name, number of threads they'd like to execute, the file that data should be read from, and if the user would like the data structure to be locked (1) or not locked (0). If the user chooses to lock, then you should initialize the mutex using pthread\_mutex\_init and the lock you created in the global space. The mutex lock should be destroyed at the end of the program using pthread\_mutex\_destroy. <br/>
+From the terminal, the user should be able to:
+1.  enter the **program name**, **number of threads** they'd like to execute, the **file** that data should be read from, and if the user would like the **data structure to be locked** (1) or not locked (0). 
+2. If the user chooses to lock, then you should initialize the mutex using pthread\_mutex\_init and the lock you created in the global space. 
+    - The mutex lock should be destroyed at the end of the program using pthread\_mutex\_destroy. <br/>
 
 So for example, input might look something like this: ```./threadedSummation 5 ten_values.txt 0 ```, or ```./threadedSummation 99 oneThousandValues 1``` <br/>
 
-If the user does not enter the four arguments (program name, number of threads, file name, and lock status), then you should return 1 for failure and print the appropriate error message (shown below). If four arguments are provided, then read from the file using the command line supplied name.
+3. If the user does not enter the four arguments (program name, number of threads, file name, and lock status), then you should return 1 for failure and print the appropriate error message (shown below). 
+4. If four arguments are provided, then read from the file using the command line supplied name.
 
-If the program was able to open the file, construct an array of thread\_data structs. Then, use [atoi](https://www.tutorialspoint.com/c_standard_library/c_function_atoi.htm) to cast the number of threads from the command line from a string to an integer value and to cast the lock status from the commandline from a string to an integer. If they can't be cast, output "Please enter a number of threads that you'd like to calculate with, filename to open, and whether to lock (./threadedSummation 9 example.txt 0)" and return 1 to exit the program. Otherwise, check to see that the number of threads they've requested is less than the number of values that you've read in, so that you don't accidentally segfault later. If too many threads have been requested, output the error shown below and return 1.  <br/>
+5. If the program was able to open the file, construct an array of thread\_data structs. 
+6. Then, use [atoi](https://www.tutorialspoint.com/c_standard_library/c_function_atoi.htm) to cast the number of threads from the command line from a string to an integer value and to cast the lock status from the commandline from a string to an integer. 
+7. If they can't be cast, output "Please enter a number of threads that you'd like to calculate with, filename to open, and whether to lock (./threadedSummation 9 example.txt 0)" and return 1 to exit the program. 
+8. Otherwise, check to see that the number of threads they've requested is less than the number of values that you've read in, so that you don't accidentally segfault later. 
+9. If too many threads have been requested, output the error shown below and return 1.  <br/>
 
-If an appropriate number of threads has been entered, construct an array of threads using pthread_t and the number of threads requested by the user on the command line. Create a  clock_t data structure and store the time that summation starts at by recording initializing the clock_t data structure with the time just before you pthread create. Initialize the mutex using pthread\_mutex\_init if the user has chosen to use a lock. <br/>
+10. If an appropriate number of threads has been entered, construct an array of threads using pthread_t and the number of threads requested by the user on the command line. 
+11. Create a  clock_t data structure and store the time that summation starts at by recording initializing the clock_t data structure with the time just before you pthread create. 
+12. Initialize the mutex using pthread\_mutex\_init if the user has chosen to use a lock. <br/>
 
-Next, loop through the array of thread\_data structs, and set the tid, end index and start index of the slice of the array you'd like the thread to sum, the user's useLock value (which should be cast using atoi), and the data elements of each struct. NOTE: the data array will be all of the read in data from earlier, and will be identical for each data struct. Start index and end index variables in the thread data struct are responsible for designating that thread's starting index to sum and ending index to sum- in other words, it defines the chunk of array indices that the thread is responsible for. Assuming you loop from 0 to number of threads, the thread data struct's end index should be calculated by  multiplying the current loop index plus one by the quotient of the maximum number of data elements and the number of threads minus 1. The thread data structs start index can be calculated subtracting the quotient of the maximum number of data elements and the number of threads and adding 1. Your last thread should contain any remainder array indices not used by earlier threads.<br/>
+13. Next, loop through the array of thread\_data structs, and set the tid, end index and start index of the slice of the array you'd like the thread to sum, the user's useLock value (which should be cast using atoi), and the data elements of each struct. 
+    - NOTE: the data array will be all of the read in data from earlier, and will be identical for each data struct. 
+14. Start index and end index variables in the thread data struct are responsible for designating that thread's starting index to sum and ending index to sum
+     - in other words, it **defines the chunk of array indices** that the thread is responsible for. 
+     - Assuming you loop from 0 to number of threads, the thread data struct's end index should be **calculated by multiplying the current loop index plus one by the quotient of the maximum number of data elements and the number of threads minus 1**. 
+     - The thread data structs **start index can be calculated subtracting the quotient of the maximum number of data elements and the number of threads and adding 1**. 
+15. Your last thread should contain any remainder array indices not used by earlier threads.<br/>
 
- Once the values are set for each thread, loop through the thread array using a **new** loop. For each thread, call pthread\_create and pass it the thread from the p_thread array at that index, the summation method, and your thread data struct that was previously set at the same index in the thread\_data array. After each thread has been created, use another **new** loop, and loop through each thread again, calling pthread\_join to make each thread pause until they've all completed.  Then store the time the program finished at in a clock_t variable and calculate the total time of execution. <br/>
+16. Once the values are set for each thread, loop through the thread array using a **new** loop. 
+17. For each thread, call pthread\_create and pass it the thread from the p_thread array at **that index, the summation method, and your thread data struct** that was previously set at the same index in the thread\_data array. 
+18. After each thread has been created, use another **new** loop, and loop through each thread again, calling pthread\_join to make each thread pause until they've all completed.
+19. Then store the time the program finished at in a clock_t variable and calculate the total time of execution. <br/>
 
 
-Calculating total time of execution can be done by subtracting start time from end time and dividing by clocks per second. Don't forget to convert it to ms! [code](https://stackoverflow.com/questions/32411678/does-clock-t-calculate-the-time-of-all-threads-c-pthreads) <br/>
+20. Calculating **total time of execution can be done by subtracting start time from end time and dividing by clocks per second**. Don't forget to convert it to ms! [code](https://stackoverflow.com/questions/32411678/does-clock-t-calculate-the-time-of-all-threads-c-pthreads) <br/>
 
-Finally, main should output the total value of the array and time taken to calculate it in ms. Destroy your mutex lock using pthread\_mutex\_destroy and end the main function's thread using pthread\_exit. <br/>
+21. Finally, main should output the total value of the array and time taken to calculate it in ms. 
+22. Destroy your mutex lock using pthread\_mutex\_destroy and 
+23. end the main function's thread using pthread\_exit. <br/>
 
 
 
