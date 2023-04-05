@@ -1,5 +1,7 @@
-loopedSummation:
-	gcc $(CFLAGS) -o loopedSummation loopedSummation.c
+CFLAGS = -pthread
 
-threadedSummation:
-	gcc $(CFLAGS) -o threadedSummation threadedSummation.c
+loopedSummation: loopedSummation.c
+	gcc -o $@ $^
+
+threadedSummation: threadedSummation.c
+	gcc $(CFLAGS) -o $@ $^
