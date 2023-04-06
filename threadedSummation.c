@@ -26,11 +26,24 @@ typedef struct thread_data{
 
 // don't fucking know what this int is tbh
 void* summation(void* thread_struct, int i){
-    
+    thread_data* data = (thread_data*) thread_struct;
+
+    if (data->useLock) pthread_mutex_lock(&lock); // use lock?
+
+    // summing code
+    long long int total = 0;
+    for (int i = data->start; i <= data->end; i++) {
+        total += data->data[i];
+    }
+    sum += total;
+
+    if (data->useLock) pthread_mutex_unlock(&myMutex); // unlock lock at end
+
+    pthread_exit(NULL); // exit thread
 }
 
 
-int readFile(char filename[] , int array[]){
+int readFile(char filename[] , int* array){
     FILE *file = fopen(filename, "r");
     int count = 0;
     printf("Reading data...\n");
