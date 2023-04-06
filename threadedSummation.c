@@ -46,7 +46,6 @@ void* summation(void* thread_struct){
 int readFile(char filename[] , int* array){
     FILE *file = fopen(filename, "r");
     int count = 0;
-    printf("Reading data...\n");
 
     if (file == NULL) {
         printf("File not found...\n");
