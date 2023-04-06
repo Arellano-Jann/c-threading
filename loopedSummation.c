@@ -13,7 +13,7 @@
         keep = !keep, count++) \
       for(item = (array) + count; keep; keep = !keep)
 
-int readFile(char filename[] , int array[]){
+int readFile(char filename[] , int* array){
     FILE *file = fopen(filename, "r");
     int count = 0;
     printf("Reading data...\n");
