@@ -5,3 +5,6 @@ loopedSummation: loopedSummation.c
 
 threadedSummation: threadedSummation.c
 	gcc $(CFLAGS) -o $@ $^
+
+clean:
+	rm -f loopedSummation threadedSummation
