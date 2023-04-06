@@ -152,11 +152,11 @@ So for example, input might look something like this: ```./threadedSummation 5 t
 
 13. Next, loop through the array of thread\_data structs, and set the tid, end index and start index of the slice of the array you'd like the thread to sum, the user's useLock value (which should be cast using atoi), and the data elements of each struct. 
     - NOTE: the data array will be all of the read in data from earlier, and will be identical for each data struct. 
-14. Start index and end index variables in the thread data struct are responsible for designating that thread's starting index to sum and ending index to sum
-     - in other words, it **defines the chunk of array indices** that the thread is responsible for. 
-     - Assuming you loop from 0 to number of threads, the thread data struct's end index should be **calculated by multiplying the current loop index plus one by the quotient of the maximum number of data elements and the number of threads minus 1**. 
-     - The thread data structs **start index can be calculated subtracting the quotient of the maximum number of data elements and the number of threads and adding 1**. 
-15. Your last thread should contain any remainder array indices not used by earlier threads.<br/>
+    - Start index and end index variables in the thread data struct are responsible for designating that thread's starting index to sum and ending index to sum
+        - in other words, it **defines the chunk of array indices** that the thread is responsible for. 
+        - Assuming you loop from 0 to number of threads, the thread data struct's end index should be **calculated by multiplying the current loop index plus one by the quotient of the maximum number of data elements and the number of threads minus 1**. 
+        - The thread data structs **start index can be calculated subtracting the quotient of the maximum number of data elements and the number of threads and adding 1**. 
+    - Your last thread should contain any remainder array indices not used by earlier threads.<br/>
 
 16. Once the values are set for each thread, loop through the thread array using a **new** loop. 
 17. For each thread, call pthread\_create and pass it the thread from the p_thread array at **that index, the summation method, and your thread data struct** that was previously set at the same index in the thread\_data array. 
@@ -171,6 +171,24 @@ So for example, input might look something like this: ```./threadedSummation 5 t
 23. end the main function's thread using pthread\_exit. <br/>
 
 
+## alternate wording
+- Check that the user has entered the correct number of arguments (program name, number of threads, file name, and lock status). If not, output the appropriate error message and return 1.
+- Use fopen to open the file specified by the user.
+- If fopen returns NULL, output the appropriate error message and return 1.
+- Read in the data from the file and store it in an array.
+- Use atoi to cast the number of threads and lock status from the command line from a string to an integer value.
+- Check that the number of threads requested is less than the number of values read in from the file. If not, output the appropriate error message and return 1.
+- Create an array of thread_data structs.
+- Create an array of pthread_t of size equal to the number of threads requested by the user.
+- Initialize the mutex using pthread_mutex_init if the user has chosen to use a lock.
+- Loop through the array of thread_data structs and set the tid, end index, start index, useLock value, and data elements for each struct.
+- Loop through the thread array and call pthread_create for each thread, passing it the thread from the pthread_t array at that index, the summation method, and the thread_data struct that was previously set at the same index in the thread_data array.
+- Loop through the thread array again and call pthread_join for each thread to wait for them to complete.
+- Store the time the program finished at in a clock_t variable and calculate the total time of execution in ms.
+- Output the total value of the array and time taken to calculate it in ms.
+- Destroy the mutex lock using pthread_mutex_destroy.
+- End the main function's thread using pthread_exit.
+
 
 ## _readFile_<br/>
 **Input Parameters**: char[], int[] <br/>
@@ -181,7 +199,7 @@ So for example, input might look something like this: ```./threadedSummation 5 t
 All output for this program and its compilation is shown below.  </br>
 
 ## _summation_<br/>
-**Input Parameters**: void*, int <br/>
+**Input Parameters**: void*, ~~int~~ <br/>
 **Returned Output**: void* <br/>
 **Functionality**: 
 

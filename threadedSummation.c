@@ -25,7 +25,7 @@ typedef struct thread_data{
 } thread_data;
 
 // don't fucking know what this int is tbh
-void* summation(void* thread_struct, int i){
+void* summation(void* thread_struct){
     thread_data* data = (thread_data*) thread_struct;
 
     if (data->useLock) pthread_mutex_lock(&lock); // use lock?
@@ -71,22 +71,53 @@ int main(int argc, char* argv[]){
     }
 
     int arr[1000];
-    int success = readFile(argv[1], arr);
+    int arrCount = readFile(argv[2], arr);
     
-    if (success == -1) return 1; // return 1 for failure
+    if (arrCount == -1) return 1; // return 1 for failure
+
+    int numThreads = atoi(argv[1]);
+    int useLock = atoi(argv[3]);
+
+    if (numThreads == 0 || (useLock != 0 && useLock != 1)) {
+        printf("Please enter a number of threads that you'd like to calculate with number of threads, filename to open, and lock use value (./threadedSummation 9 tenValues.txt 1)\n")
+        return 1;
+    }
+
+    numThreads = (numThreads > arrCount) ? arrCount : numThreads; // if numThreads > arrCount, set numThreads to arrCount (number of elements in array
+    struct thread_data threadArray[numThreads]; // array of thread_data structs
+    // thread_data* threadArray = (thread_data*) malloc(numThreads * sizeof(thread_data)); // array of thread_data structs
+    pthread_t *threads = (pthread_t*) malloc(numThreads * sizeof(pthread_t)); // construct array of threads
 
     clock_t initial_time = clock();
 
-    // summing code
-    foreach(int *v, arr) {
-        sum += *v;
+    // summing code (11)
+    if (useLock) pthread_mutex_init(&lock, NULL); // initialize lock
+    for (int i = 0; i < numThreads; i++) {
+        threadArray[i].tid = i; // thread id
+        threadArray[i].useLock = useLock;
+        threadArray[i].data = arr; // data array
+        threadArray[i].startInd = i * (arrCount / numThreads);
+        threadArray[i].endInd = (i + 1) * (arrCount / numThreads) - 1;
+        if (i == numThreads - 1) threadArray[i].endInd = arrCount - 1; // fill in the left overs
+        pthread_create(&threads[i], NULL, summation, (void*) &threadArray[i]);
+        pthread_join(threads[i], NULL);
     }
 
     clock_t final_time = clock();
+    if (useLock) pthread_mutex_unlock(&lock); // unlock lock at end
+
+
+    // // summing code
+    // foreach(int *v, arr) {
+    //     sum += *v;
+    // }
+
 
     float total_time = (float) (final_time - initial_time) / CLOCKS_PER_SEC * 1000;
     printf("Total value of array: %lld\n", sum);
     printf("Time Taken (ms): %f\n", total_time);
+    if (uselock) pthread_mutex_destroy(&lock); // destroy lock
+    pthread_exit(NULL); // exit thread
     return 1;
 
 }
