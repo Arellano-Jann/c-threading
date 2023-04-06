@@ -90,3 +90,64 @@ int main(int argc, char* argv[]){
     return 1;
 
 }
+
+
+// int main(int argc, char* argv[]) {
+//     clock_t start_time, end_time;
+//     double total_time;
+
+//     pthread_t* threads;
+//     thread_data_t* thread_data;
+
+//     int i, num_threads, len, use_lock;
+//     int* data;
+
+//     if (argc != 5) {
+//         printf("Please enter the program name, number of threads, filename to open, and whether to lock (./threadedSummation 9 example.txt 0)\n");
+//         return 1;
+//     }
+
+//     num_threads = atoi(argv[1]);
+//     data = read_data(argv[2], &len);
+//     use_lock = atoi(argv[3]);
+
+//     if (num_threads > len) {
+//         printf("Too many threads requested. Please enter a number of threads less than or equal to the number of data elements.\n");
+//         return 1;
+//     }
+
+//     threads = (pthread_t*) malloc(num_threads * sizeof(pthread_t));
+//     thread_data = (thread_data_t*) malloc(num_threads * sizeof(thread_data_t));
+
+//     if (threads == NULL || thread_data == NULL) {
+//         printf("Could not allocate memory for threads or thread data.\n");
+//         return 1;
+//     }
+
+//     if (use_lock) {
+//         pthread_mutex_init(&lock, NULL);
+//     }
+
+//     start_time = clock();
+
+//     for (i = 0; i < num_threads; i++) {
+//         thread_data[i].tid = i;
+//         thread_data[i].useLock = use_lock;
+//         thread_data[i].data = data;
+
+//         thread_data[i].start_index = i * (len / num_threads);
+//         thread_data[i].end_index = (i + 1) * (len / num_threads) - 1;
+
+//         if (i == num_threads - 1) {
+//             thread_data[i].end_index = len - 1;
+//         }
+
+//         pthread_create(&threads[i], NULL, (void*) sum_slice, (void*) &thread_data[i]);
+//     }
+
+//     for (i = 0; i < num_threads; i++) {
+//         pthread_join(threads[i], NULL);
+//     }
+
+//     end_time = clock();
+//     total_time = (double
