@@ -6,6 +6,7 @@ loopedSummation: loopedSummation.c
 
 threadedSummation: threadedSummation.c
 	gcc $(CFLAGS) -o $@ $^
+	./threadedSummation tenValues.txt
 
 clean:
 	rm -f loopedSummation threadedSummation
