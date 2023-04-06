@@ -32,12 +32,12 @@ void* summation(void* thread_struct){
 
     // summing code
     long long int total = 0;
-    for (int i = data->start; i <= data->end; i++) {
+    for (int i = data->startInd; i <= data->endInd; i++) {
         total += data->data[i];
     }
     sum += total;
 
-    if (data->useLock) pthread_mutex_unlock(&myMutex); // unlock lock at end
+    if (data->useLock) pthread_mutex_unlock(&lock); // unlock lock at end
 
     pthread_exit(NULL); // exit thread
 }
@@ -60,13 +60,13 @@ int readFile(char filename[] , int* array){
 
 
 int main(int argc, char* argv[]){
-    printf("Reading data...\n")
+    printf("Reading data...\n");
     if (argc == 2) {
-        printf("File not found...\n")
+        printf("File not found...\n");
         return 1;
     }
     if (argc == 3) {
-        printf("Please enter a number of threads that you'd like to calculate with number of threads, filename to open, and lock use value (./threadedSummation 9 tenValues.txt 1)\n")
+        printf("Please enter a number of threads that you'd like to calculate with number of threads, filename to open, and lock use value (./threadedSummation 9 tenValues.txt 1)\n");
         return 1;
     }
 
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]){
     int useLock = atoi(argv[3]);
 
     if (numThreads == 0 || (useLock != 0 && useLock != 1)) {
-        printf("Please enter a number of threads that you'd like to calculate with number of threads, filename to open, and lock use value (./threadedSummation 9 tenValues.txt 1)\n")
+        printf("Please enter a number of threads that you'd like to calculate with number of threads, filename to open, and lock use value (./threadedSummation 9 tenValues.txt 1)\n");
         return 1;
     }
 
@@ -116,7 +116,7 @@ int main(int argc, char* argv[]){
     float total_time = (float) (final_time - initial_time) / CLOCKS_PER_SEC * 1000;
     printf("Total value of array: %lld\n", sum);
     printf("Time Taken (ms): %f\n", total_time);
-    if (uselock) pthread_mutex_destroy(&lock); // destroy lock
+    if (useLock) pthread_mutex_destroy(&lock); // destroy lock
     pthread_exit(NULL); // exit thread
     return 1;
 
